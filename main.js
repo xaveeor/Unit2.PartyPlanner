@@ -4,15 +4,11 @@ const formEl = document.querySelector('form');
 const partyName = document.querySelector('#partyname');
 
 async function getPartys() {
-  try {
+
     const response = await fetch(BASE_URL);
     const data = await response.json();
     console.log(data.data);
-    return data.data;
-  } catch (err) {
-    console.error(err);
-  }
-}
+    return data.data;}
  
 function render(partys) {
   const template = partys.map(party => {
@@ -39,7 +35,6 @@ PartyApp();
 
 formEl.addEventListener('submit', async (event) => {
   event.preventDefault();
-  try {
     await fetch(BASE_URL, {
       method: 'POST',
       headers: {
@@ -59,17 +54,15 @@ formEl.addEventListener('submit', async (event) => {
     locations.value = '';
   
     PartyApp();
-  } catch (err) {
-    console.error(err);
-  }
 });
 
 mainEl.addEventListener('click', async (event) => {
   if(event.target.matches('button')) {
     const id = event.target.dataset.id;
-    await fetch(`${BASE_URL}/${id}`, {
+    await fetch(`${BASE_URL}`, {
       method: 'DELETE',
     });
     PartyApp();
   }
 }); 
+
