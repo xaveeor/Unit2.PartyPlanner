@@ -5,6 +5,7 @@ const partyName = document.querySelector('#partyName');
 const locations = document.querySelector('#locations');
 const date = document.querySelector('#date');
 const description = document.querySelector('#description');
+const state = [];
 
 
 async function getPartys() {
@@ -16,6 +17,7 @@ async function getPartys() {
   }
  
 function render(partys) {
+  console.log("adding data")
   const template = partys.map(party => {
     return (
       `<section>
@@ -34,6 +36,7 @@ function render(partys) {
 
 
 async function partyApp() {
+  console.log("rendering")
   const partys = await getPartys();
   render(partys);
 }
@@ -42,27 +45,32 @@ partyApp();
 
 formEl.addEventListener('submit', async (event) => {
   event.preventDefault();
-    await fetch(BASE_URL, {
+  const dateData = new Date(date.value).toISOString();
+  try{
+    const response = await fetch(BASE_URL, {
       method: 'POST',
       headers: {
+        Accept: "application/json",
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name: partyName.value,
         description: description.value,
-        date: date.value,
+        date: dateData,
         location: locations.value,
+
       })
     });
+  
     partyName.value = '';
     date.value = '';
     description.value = '';
     locations.value = '';
     
-  
     partyApp();
- 
-
+  }catch(err){
+    console.error(err);
+  }
 });
 
 
